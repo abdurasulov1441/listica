@@ -1,0 +1,78 @@
+{
+  "project_info": {
+    "project_number": "307237055110",
+    "project_id": "listica-9bf04",
+    "storage_bucket": "listica-9bf04.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307237055110:android:1d114bfbb73ca7d02eff07",
+        "android_client_info": {
+          "package_name": "uz.listica"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "307237055110-c6gjf1kbl2sedt87qfvglo29ihb6f5p3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uz.listica",
+            "certificate_hash": "6da499f58f1de2629425f8f05576c3aca6ec1f52"
+          }
+        },
+        {
+          "client_id": "307237055110-fnga5la88vhk1dutcnkbv18t8esnk63c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uz.listica",
+            "certificate_hash": "c442ac377cd4e09f13f18538d063367c29704c2a"
+          }
+        },
+        {
+          "client_id": "307237055110-g1rhij00h8t8pc049216snegdddej94n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uz.listica",
+            "certificate_hash": "d9e1a4e8ad707e23fa20ae4152f2601cc73e96df"
+          }
+        },
+        {
+          "client_id": "307237055110-jgqlv4lq75f32c8vacj3v8todqd7gj1m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uz.listica",
+            "certificate_hash": "3264f8b0e22ff365b5560deef0b09831695e694e"
+          }
+        },
+        {
+          "client_id": "307237055110-iu42univugekh7thrkcjgrlj9dvnhn7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxiP4dDVYQ7g-MVR5x5Ompw4pbewLmDrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "307237055110-iu42univugekh7thrkcjgrlj9dvnhn7a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "307237055110-ae8g1q9a56tio0l1vp58jr47qngdhrdd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "uz.listica"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

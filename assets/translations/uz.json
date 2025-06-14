@@ -1,0 +1,239 @@
+{ 
+    "phone_number" : "Telefon raqam",
+    "login" : "Kirish",
+    "dont_have_account" : "Hisobingiz yo'qmi?",
+    "sign_up" : "Ro'yxatdan o'tish",
+    "choose_language" : "Tilni tanlang",
+    "full_name" : "Ism familiya",
+    "accept_privacy_policy" : "Foydalanish shartlarini qabul qilaman",
+    "already_have_account" : "Hisobingiz bormi?",
+
+    "enter_sms" : "Tasdiqlash kodini kiriting",
+    "resend_sms" : "Kodni qayta yuborish",
+    "we_send_sms" : "Sizga 6 xonali tasdiqlash kodi yuborildi",
+    "verify" : "Tasdiqlash",
+    "sms_alredy_sent" : "SMS ni qayta yuborish uchun 60 soniya kuting!",
+    "sms_lenght" : "Tasdiqlash kodi 6 raqamdan iborat bo‘lishi kerak.",
+
+    "menu" : "Menu",
+    "categories" : "Kategoriyalar",
+    "all_categories" : "Barcha kategoriyalar",
+    "all" : "Barchasi",
+    "edit" : "Tahrirlash",
+    "delete" : "O'chirish",
+    "element_deleted" : "Tovar muvaffaqiyatli o'chirildi",
+    "return" : "Qaytarish",
+    "not_found_items" : "Hech narsa topilmadi",
+    "in_this_category_dont_have_products" : "Bu kategoriyada mahsulotlar yo'q",
+    "edit_product" : "Mahsulotni tahrirlash",
+    "add_product" : "Mahsulot qo'shish",
+
+    "products" : "Mahsulotlar",
+    "promotions" : "Aksiyalar",
+    "no_data" : "Ma'lumot yo'q",
+    "orders" : "Buyurtmalar",
+    "no_orders" : "Buyurtmalar yo'q",
+    "cart" : "Savat",
+    "cart_empty" : "Savat bo'sh",
+
+    "my_data" : "Mening ma'lumotlarim",
+    "my_adresess" : "Mening manzillarim",
+    "chooselanguage" : "Tilni tanlash",
+    "contacts" : "Aloqa",
+    "privacy_policy" : "Maxfiylik siyosati",
+    "about_app" : "Ilova haqida",
+    "exit" : "Chiqish",
+    "home" : "Asosiy",
+    "profile" : "Profil",
+
+    "yes" : "Ha",
+    "no" : "Yo'q",
+    "exit_text" : "Chiqsangiz savatdagi narsalar o'chib ketadi. Chiqmoqchimisiz?",
+
+    "settings" : "Sozlamalar",
+
+    "new" : "Yangi",
+    "confirmed" : "Tasdiqlangan",
+    "processing" : "Jarayonda",
+    "ontheway" : "Yo'lda",
+    "delivered" : "Yetkazildi",
+    "cancelled" : "Bekor qilingan",
+    "refunded" : "Qaytarilgan",
+    "unknown" : "Nomalum",
+
+    "order" : "Buyurtma",
+    "payment_type" : "To'lov turi",
+    "total_sum" : "Umumiy hisob",
+    "curier_detail" : "Kuryer haqida ma'lumot",
+    "call" : "📞",
+    "order_details" : "Buyurtma tafsilotlari",
+    "sum" : "Soni",
+    "price" : "Narxi",
+    "items" : "Mahsulotlar",
+    "cargo" : "Yetkazib berish",
+    "total" : "Jami",
+    "order_detail" : "Buyurtma tafsilotlari",
+    
+    
+    "money" : "Naqd pul",
+
+    "minute_one": "daqiqa oldin",
+    "minute_few": "daqiqa oldin",
+    "minute_many": "daqiqa oldin",
+    "hour_one": "soat oldin",
+    "hour_few": "soat oldin",
+    "hour_many": "soat oldin",
+    "day_one": "kun oldin",
+    "day_few": "kun oldin",
+    "day_many": "kun oldin",
+
+    "payment_proccess" : "To'lov jarayonida",
+    "min_ago" : "daqiqa oldin",
+    "hour_ago" : "soat oldin",
+    "day_ago" : "kun oldin",
+    "order_time" : "Buyurtma vaqti",
+    "ready_to_delivery" : "Yetkazib berishga tayyor",
+    "cod" : "Naqd pul",
+    "som" : "so'm",
+    "oder_history" : "Buyurtma tarixi",
+    "accept" : "Qabul qilish",
+    "open_map" : "Xaritada ko'rsatish",
+
+    "user_details" : "Foydalanuvchi ma'lumotlari",
+    "cancel" : "Bekor qilish",
+    "weekly_chart" : "Haftalik grafik",
+    "M" : "D",
+    "T" : "S",
+    "W" : "Ch",
+    "Th" : "P",
+    "F" : "J",
+    "S" : "Sh",
+    "Su" : "Y",
+
+    "download" : "Yuklab olish",
+    "document_download" : "Maxfiylik siyosatini yuklab olimoqchimisiz?",
+
+    "name" : "Ism",
+    "phone" : "Telefon raqam",
+    "birth_date" : "Tug'ilgan sana",
+    "gender" : "Jinsi",
+    "email" : "Elektron pochta",
+    "save" : "Saqlash",
+    "man" : "Erkak",
+    "woman" : "Ayol",
+
+    "success" : "Muvaffaqiyatli",
+    "success_update_user" : "Muvaffaqiyatli yangilandi",
+    "error" : "Xatolik",
+    "error_update_user" : "Yangilashda xatolik",
+
+    "app_creator" : "Ishlab chiqaruvchi",
+    "version" : "Versiya",
+    "mark_app" : "Ilovani baholang",
+
+    "submit_order" : "Buyurtmani tasdiqlash",
+    "your_order" : "Sizning buyurtmangiz:",
+    "order_time1" : "Yetkazib berish vaqti: 30 daqiqa ichida",
+    "choose_address" : "Manzilni tanlang",
+    "add_address" : "Manzil qo'shish",
+    "your_dont_have_address" : "Sizda manzil yo'q",
+    
+    "choose_from_my_adress" : "Manzillarimdan tanlash",
+    "choose" : "Tanlash",
+    "choose_location" : "Joylashuvni tanlang",
+    "error_location_sumbit" : "Iltimos, barcha maydonlarni to'ldiring va joylashuvni tanlang",
+    "choose_from_map" : "Xaritadan tanlash uchun bosing",
+    "address" : "Manzil",
+    "house" : "Uy",
+    "flat" : "Xonadon",
+    "door_password" : "Yo'lak paroli",
+    "additional_number" : "Qo'shimcha raqam",
+    "comment" : "Izoh",
+    "please_enter_address" : "Iltimos manzilni kiriting",
+    "address_added" : "Manzil muvaffaqiyatli qo'shildi",
+
+    "call_delivery" : "Yetkazib berish telefonlari:",
+    "address_detail" : "Manzil tafsilotlari",
+    "close" : "Yopish",
+    "select_gender" : "Jinsni tanlang",
+    
+    "add" : "Qo'shish",
+    "no_addresses" : "Manzillar yo'q",
+    "add_address_prompt" : "Taom yetkazib berish uchun iltimos manzilni kiriting",
+    "delete_address_confirm" : "Siz rostdan ham manzilni o'chirmoqchimisz?",
+    "delete_address" : "Manzilni o'chirish",
+
+    "contacts.phone_error": "Telefon ilovasini ochib bo‘lmadi: {0}",
+    "contacts.show_on_map": "Xaritada ko‘rsatish",
+    "contacts.address": "Manzil",
+    "contacts.working_hours": "Ish soatlari",
+    "contacts.no_weekends": "dam olish kunlarisiz",
+
+    "day": "Kun",
+    "week": "Hafta",
+    "month": "Oy",
+    "year": "Yil",
+    "telegram_users": "Telegram foydalanuvchilari",
+    "mobile_users": "Mobil foydalanuvchilar",
+    "total_users": "Umumiy foydalanuvchilar soni",
+    "new_users": "Yangi foydalanuvchilar",
+    "monday": "Du",
+    "tuesday": "Se",
+    "wednesday": "Cho",
+    "thursday": "Pa",
+    "friday": "Ju",
+    "saturday": "Sha",
+    "sunday": "Ya",
+    "week_1": "1-hafta",
+    "week_2": "2-hafta",
+    "week_3": "3-hafta",
+    "week_4": "4-hafta",
+    "week_5": "5-hafta",
+    "january": "Yan",
+    "march": "Mar",
+    "june": "Iyun",
+    "september": "Sen",
+    "december": "Dek",
+    "error_loading_data": "Ma'lumotlarni yuklashda xatolik",
+
+    "today": "Bugungi",
+    "profit": "Daromad",
+    "this_week": "Bu hafta",
+    "this_month": "Bu oy",
+    "this_year": "Bu yil",
+    "delivery_not_available_outside_hours": "Filiallarimiz ish vaqti 9:00 dan 24:00 gacha. Iltimos, boshqa vaqtda buyurtma bering.",
+    "order_count": "Buyurtmalar soni",
+    "top_items": "Eng yaxshi mahsulotlar",
+    "count": "Soni",
+    "retry": "Qayta urinish",
+
+    "location_selected": "Manzil tanlandi",
+
+    "delete_account": "Hisobni o'chirish",
+
+    "unauth": "Siz tizimga kirmagansiz, davom etish va barcha ma'lumotlarni ko'rish uchun iltimos tizimga kiring",
+
+    "login_to_access" : "Barcha imkoniyatlardan foydalanish uchun tizimga kiring",
+    "please_login" : "Iltimos tizimga kiring",
+    "guest_user" : "Mehmon"
+
+    
+
+
+
+
+    
+
+
+    
+  
+
+
+
+
+
+
+
+
+
+}
