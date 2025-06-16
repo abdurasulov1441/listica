@@ -1,6 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:listica/services/modal/custom_expandable_dialog.dart';
+import 'package:listica/services/modal/custom_modal.dart';
+import 'package:listica/services/style/app_colors.dart';
+import 'package:listica/services/style/app_style.dart';
 import 'package:uuid/uuid.dart';
 
 class DetailPage extends StatefulWidget {
@@ -24,39 +31,33 @@ class _DetailPageState extends State<DetailPage> {
 
   void _addItem(BuildContext context) {
     final controller = TextEditingController();
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Yangi mahsulot nomi'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(hintText: 'Masalan: Molo ko 2L'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Bekor qilish'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final newItem = {
-                'id': const Uuid().v4(),
-                'title': controller.text.trim(),
-                'done': false,
-                'color': Colors.grey.value,
-                'createdAt': FieldValue.serverTimestamp(),
-                'order': items.length,
-              };
-              await widget.shoppingLists
-                  .doc(widget.listId)
-                  .collection('items')
-                  .add(newItem);
-              controller.clear();
-              Navigator.pop(context);
-            },
-            child: const Text('Qo‘shish'),
-          ),
-        ],
+      builder: (context) => CustomExpandableInputDialog(
+        title: 'new_product'.tr(),
+        hintText: 'eg_milk'.tr(),
+        confirmText: 'add'.tr(),
+        cancelText: 'cancel'.tr(),
+
+        onConfirm: (text) async {
+          final trimmed = text.trim();
+          if (trimmed.isEmpty) return;
+
+          final newItem = {
+            'id': const Uuid().v4(),
+            'title': trimmed,
+            'done': false,
+            'color': Colors.grey.value,
+            'createdAt': FieldValue.serverTimestamp(),
+            'order': items.length,
+          };
+          await widget.shoppingLists
+              .doc(widget.listId)
+              .collection('items')
+              .add(newItem);
+          controller.clear();
+        },
       ),
     );
   }
@@ -66,7 +67,11 @@ class _DetailPageState extends State<DetailPage> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Rangni tanlang'),
+        backgroundColor: AppColors.backgroundColor,
+        title: Text(
+          'choose_color'.tr(),
+          style: AppStyle.fontStyle.copyWith(fontSize: 20),
+        ),
         content: BlockPicker(
           pickerColor: selectedColor,
           onColorChanged: (color) {
@@ -81,22 +86,17 @@ class _DetailPageState extends State<DetailPage> {
   void _confirmDelete(DocumentSnapshot itemDoc) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Ishonchingiz komilmi?'),
-        content: const Text('Bu element o‘chiriladi.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Bekor qilish'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              await itemDoc.reference.delete();
-              Navigator.pop(context);
-            },
-            child: const Text('Ha, o‘chirish'),
-          ),
-        ],
+      builder: (_) => CustomDialog(
+        title: "are_you_sure".tr(),
+        subtitle: "delete_this_element".tr(),
+        cancelText: "cancel".tr(),
+        confirmText: "confirm".tr(),
+        confirmButtonColor: Colors.red,
+        onCancel: () => Navigator.pop(context),
+        onConfirm: () async {
+          Navigator.pop(context);
+          await itemDoc.reference.delete();
+        },
       ),
     );
   }
@@ -104,10 +104,24 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      backgroundColor: AppColors.foregroundColor,
+      appBar: AppBar(
+        title: Text(widget.title),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            context.pop();
+          },
+          icon: Icon(Icons.arrow_back_ios),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.backgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(30),
+        ),
         onPressed: () => _addItem(context),
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: AppColors.logoColor1),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: widget.shoppingLists
@@ -116,8 +130,14 @@ class _DetailPageState extends State<DetailPage> {
             .orderBy('order')
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return const Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: AppColors.backgroundColor,
+                color: AppColors.logoColor1,
+              ),
+            );
+          }
           items = snapshot.data!.docs;
 
           return ListView.builder(
@@ -130,8 +150,13 @@ class _DetailPageState extends State<DetailPage> {
               final color = Color(item['color'] ?? Colors.grey.value);
 
               return Container(
+                margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: color.withOpacity(0.2),
+                ),
                 key: ValueKey(itemDoc.id),
-                color: color.withOpacity(0.2),
+
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Row(
                   children: [
@@ -145,17 +170,31 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.color_lens, size: 20),
+                      icon: SvgPicture.asset(
+                        'assets/icons/palette.svg',
+                        width: 20,
+                        height: 20,
+                      ),
                       onPressed: () => _changeColor(itemDoc),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.delete, size: 20),
+                      icon: SvgPicture.asset(
+                        'assets/icons/trash.svg',
+                        width: 20,
+                        height: 20,
+                      ),
                       onPressed: () => _confirmDelete(itemDoc),
                     ),
                     Checkbox(
                       value: done,
-                      onChanged: (val) =>
-                          itemDoc.reference.update({'done': val}),
+                      onChanged: (val) {
+                        itemDoc.reference.update({'done': val});
+                      },
+                      activeColor: Colors.green,
+                      checkColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
                     ),
                   ],
                 ),

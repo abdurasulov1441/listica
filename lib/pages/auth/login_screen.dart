@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:listica/app/router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -74,9 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       print('Ошибка входа через Google: $e');
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Ошибка: ${e.toString()}")));
     }
   }
 
@@ -120,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 20),
                 Center(
                   child: Text(
-                    'Xush kelibsiz!',
+                    'welcome'.tr(),
                     style: AppStyle.fontStyle.copyWith(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -128,15 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Center(
-                  child: Text(
-                    'Tizimga kirishingiz mumkin',
-                    style: AppStyle.fontStyle.copyWith(
-                      color: Colors.grey[500],
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
+
                 const SizedBox(height: 30),
                 TextFormField(
                   style: AppStyle.fontStyle,
@@ -148,14 +138,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
                     ),
-                    hintText: 'Emailingizni kiriting',
+                    hintText: 'enter_email'.tr(),
                     hintStyle: AppStyle.fontStyle.copyWith(
                       color: Colors.grey[400],
                     ),
                   ),
                   validator: (email) =>
                       email != null && !EmailValidator.validate(email)
-                      ? 'To\'g\'ri email kiriting'
+                      ? 'enter_true_email'.tr()
                       : null,
                 ),
                 const SizedBox(height: 20),
@@ -170,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
                     ),
-                    hintText: 'Parolingizni kiriting',
+                    hintText: 'enter_password'.tr(),
                     hintStyle: TextStyle(color: Colors.grey[400]),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -183,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   validator: (value) => value != null && value.length < 6
-                      ? 'Parol kamida 6 belgidan iborat bo\'lishi kerak'
+                      ? 'password_must_be_at_least_6_characters'.tr()
                       : null,
                 ),
                 const SizedBox(height: 20),
@@ -198,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     onPressed: login,
                     child: Text(
-                      'Kirish',
+                      'login'.tr(),
                       style: AppStyle.fontStyle.copyWith(
                         color: Colors.white,
                         fontSize: 18,
@@ -215,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         context.push(Routes.passwordRecoveryPage);
                       },
                       child: Text(
-                        'Parolni unutdingizmi?',
+                        'forgot_password'.tr(),
                         style: AppStyle.fontStyle.copyWith(),
                       ),
                     ),
@@ -225,12 +215,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextButton(
                     onPressed: () => context.push(Routes.register),
                     child: Text(
-                      'Hisobingiz yo\'qmi? Ro\'yxatdan o\'ting',
+                      'dont_have_an_acoount'.tr() + 'register'.tr(),
                       style: AppStyle.fontStyle.copyWith(),
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () => signInWithGoogle(context),
@@ -250,7 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Image.asset('assets/images/google.png', height: 24),
                         SizedBox(width: 10),
                         Text(
-                          'Sign in with Google',
+                          'sign_with_google'.tr(),
                           style: AppStyle.fontStyle.copyWith(
                             color: Colors.black,
                             fontSize: 18,

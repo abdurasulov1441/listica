@@ -11,7 +11,6 @@ abstract class AppColors {
   static const grade2 = Color.fromARGB(255, 0, 119, 119);
   static const uiText = Color(0xFFABABAB);
   static const ratingColor = Color(0xFFFFC100);
-
-
-
+  static const logoColor1 = Color(0xFF456B79);
+  static const logoColor2 = Color(0xFF8ABEAD);
 }

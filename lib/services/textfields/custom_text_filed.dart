@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:listica/services/style/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -30,6 +31,7 @@ class CustomTextField extends StatelessWidget {
       onChanged: onChanged,
       obscureText: obscureText,
       decoration: customDecoration ?? _defaultDecoration(),
+      inputFormatters: [LengthLimitingTextInputFormatter(6)],
     );
   }
 

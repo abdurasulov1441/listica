@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:listica/pages/auth/verify_email_screen.dart';
 import 'package:listica/pages/auth/login_screen.dart'; // <--- добавь этот импорт
 import 'package:listica/pages/main_page.dart';
+import 'package:listica/services/style/app_colors.dart';
 
 class FirebaseStream extends StatelessWidget {
   const FirebaseStream({super.key});
@@ -20,7 +21,10 @@ class FirebaseStream extends StatelessWidget {
 
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: Center(child: CircularProgressIndicator(
+                backgroundColor: AppColors.backgroundColor,
+                color: AppColors.logoColor1,
+              ),),
           );
         }
 

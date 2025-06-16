@@ -1,7 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:listica/pages/lists/detail_page.dart';
+import 'package:listica/services/modal/custom_expandable_dialog.dart';
+import 'package:listica/services/modal/custom_modal.dart';
+import 'package:listica/services/style/app_colors.dart';
+import 'package:listica/services/style/app_style.dart';
+import 'package:lottie/lottie.dart';
 
 class GroupPage extends StatefulWidget {
   const GroupPage({super.key});
@@ -52,36 +59,25 @@ class _GroupPageState extends State<GroupPage> {
   }
 
   void _createList() {
+    final TextEditingController controller = TextEditingController();
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Yangi roʻyxat nomi'),
-        content: TextField(
-          controller: listTitleController,
-          decoration: const InputDecoration(
-            hintText: 'Masalan: Haftalik xaridlar',
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Bekor qilish'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final title = listTitleController.text.trim();
-              if (title.isNotEmpty) {
-                shoppingLists.add({
-                  'title': title,
-                  'createdAt': FieldValue.serverTimestamp(),
-                });
-                listTitleController.clear();
-              }
-              Navigator.pop(context);
-            },
-            child: const Text('Qoʻshish'),
-          ),
-        ],
+      builder: (context) => CustomExpandableInputDialog(
+        title: 'new_list'.tr(),
+        hintText: 'eg_shopping_list'.tr(),
+        confirmText: 'add'.tr(),
+        cancelText: 'cancel'.tr(),
+        onConfirm: (title) {
+          final trimmedTitle = title.trim();
+          if (trimmedTitle.isNotEmpty) {
+            shoppingLists.add({
+              'title': trimmedTitle,
+              'createdAt': FieldValue.serverTimestamp(),
+            });
+          }
+          controller.clear();
+        },
       ),
     );
   }
@@ -89,22 +85,17 @@ class _GroupPageState extends State<GroupPage> {
   void _confirmDelete(DocumentSnapshot listDoc) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Ishonchingiz komilmi?'),
-        content: const Text('Bu roʻyxat o‘chiriladi.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Bekor qilish'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              await listDoc.reference.delete();
-              Navigator.pop(context);
-            },
-            child: const Text('Ha, o‘chirish'),
-          ),
-        ],
+      builder: (_) => CustomDialog(
+        title: "are_you_sure".tr(),
+        subtitle: "will_deleted_lists".tr(),
+        cancelText: "cancel".tr(),
+        confirmText: "confirm".tr(),
+        confirmButtonColor: Colors.red,
+        onCancel: () => Navigator.pop(context),
+        onConfirm: () async {
+          Navigator.pop(context);
+          await listDoc.reference.delete();
+        },
       ),
     );
   }
@@ -117,75 +108,112 @@ class _GroupPageState extends State<GroupPage> {
   @override
   Widget build(BuildContext context) {
     if (pairId == null) {
-      return const Center(
-        child: Text(
-          'Iltimos, birinchi navbatda juftlik yarating, shunda roʻyxat almashish mumkin bo‘ladi.',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16),
+      return Scaffold(
+        backgroundColor: AppColors.foregroundColor,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                LottieBuilder.asset('assets/lottie/unauth.json', repeat: false),
+                Text(
+                  'please_first_you_need_connect'.tr(),
+                  textAlign: TextAlign.center,
+                  style: AppStyle.fontStyle,
+                ),
+              ],
+            ),
+          ),
         ),
       );
     }
 
     return Scaffold(
+      backgroundColor: AppColors.foregroundColor,
       floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(30),
+        ),
+        backgroundColor: AppColors.backgroundColor,
         onPressed: _createList,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: AppColors.logoColor1),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: shoppingLists
-            .orderBy('createdAt', descending: true)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SafeArea(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: shoppingLists
+                .orderBy('createdAt', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: AppColors.backgroundColor,
+                    color: AppColors.logoColor1,
+                  ),
+                );
+              }
 
-          final lists = snapshot.data!.docs;
+              final lists = snapshot.data!.docs;
 
-          return ListView.builder(
-            itemCount: lists.length,
-            itemBuilder: (context, index) {
-              final listDoc = lists[index];
-              final title = listDoc['title'];
-              final listId = listDoc.id;
+              return ListView.builder(
+                itemCount: lists.length,
+                itemBuilder: (context, index) {
+                  final listDoc = lists[index];
+                  final title = listDoc['title'];
+                  final listId = listDoc.id;
 
-              return FutureBuilder<int>(
-                future: _getItemCount(listId),
-                builder: (context, countSnapshot) {
-                  final count = countSnapshot.data ?? 0;
+                  return FutureBuilder<int>(
+                    future: _getItemCount(listId),
+                    builder: (context, countSnapshot) {
+                      final count = countSnapshot.data ?? 0;
 
-                  return Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    child: ListTile(
-                      title: Text(
-                        title,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text('Mahsulotlar: $count'),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => _confirmDelete(listDoc),
-                      ),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => DetailPage(
-                            listId: listId,
-                            title: title,
-                            shoppingLists: shoppingLists,
+                      return Card(
+                        color: AppColors.backgroundColor,
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            title,
+                            style: AppStyle.fontStyle.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '${'products'.tr()}: $count',
+                            style: AppStyle.fontStyle.copyWith(fontSize: 14),
+                          ),
+                          trailing: IconButton(
+                            icon: SvgPicture.asset(
+                              'assets/icons/trash.svg',
+                              color: AppColors.logoColor1,
+                            ),
+                            onPressed: () => _confirmDelete(listDoc),
+                          ),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => DetailPage(
+                                listId: listId,
+                                title: title,
+                                shoppingLists: shoppingLists,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   );
                 },
               );
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }

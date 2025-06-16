@@ -95,11 +95,12 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   Future<void> _reauthenticateWithEmailPassword(User user) async {
     try {
       final email = user.email;
-      if (email == null)
+      if (email == null) {
         throw FirebaseAuthException(
           code: "no-email",
           message: "Email не найден",
         );
+      }
 
       final passwordController = TextEditingController();
 

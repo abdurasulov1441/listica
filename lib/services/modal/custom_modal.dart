@@ -23,7 +23,7 @@ class CustomDialog extends StatelessWidget {
     this.confirmText = "yes",
     required this.onCancel,
     required this.onConfirm,
-    this.confirmButtonColor = AppColors.iconColor,
+    this.confirmButtonColor = AppColors.logoColor1,
     this.cancelButtonColor = const Color(0xFFF5F5F5),
     this.confirmTextColor = Colors.white,
     this.cancelTextColor = Colors.black,

@@ -21,9 +21,9 @@ class CustomIconButton extends StatelessWidget {
     this.onPressed,
     this.disableButton = false,
     this.inProgress = false,
-    this.backgroundColor = AppColors.iconColor,
+    this.backgroundColor = AppColors.logoColor1,
     this.foregroundColor = Colors.white,
-    this.borderRadius = 30,
+    this.borderRadius = 18,
     this.height = 50,
     this.width,
   });
@@ -36,7 +36,10 @@ class CustomIconButton extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: (disableButton || inProgress) ? null : onPressed,
         icon: inProgress
-            ? const CircularProgressIndicator(color: AppColors.iconColor)
+            ? const CircularProgressIndicator(
+                backgroundColor: AppColors.backgroundColor,
+                color: AppColors.logoColor1,
+              )
             : Icon(icon, color: foregroundColor),
         label: Text(
           label,

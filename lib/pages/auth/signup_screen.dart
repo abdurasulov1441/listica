@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:listica/app/router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -81,7 +82,7 @@ class _SignUpScreen extends State<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Yangi akkaunt yarating',
+                  'create_new_account'.tr(),
                   style: AppStyle.fontStyle.copyWith(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -117,12 +118,12 @@ class _SignUpScreen extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
                     ),
-                    hintText: 'Email kiriting',
+                    hintText: 'enter_email'.tr(),
                     hintStyle: TextStyle(color: Colors.grey[400]),
                   ),
                   validator: (email) =>
                       email != null && !EmailValidator.validate(email)
-                      ? 'To\'g\'ri email kiriting'
+                      ? 'enter_true_email'.tr()
                       : null,
                 ),
                 const SizedBox(height: 20),
@@ -137,7 +138,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
                     ),
-                    hintText: 'Parol kiriting',
+                    hintText: 'enter_password'.tr(),
                     hintStyle: TextStyle(color: Colors.grey[400]),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -150,7 +151,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                     ),
                   ),
                   validator: (value) => value != null && value.length < 6
-                      ? 'Parol kamida 6 ta belgi bo\'lishi kerak'
+                      ? 'password_must_be_at_least_6_characters'.tr()
                       : null,
                 ),
                 const SizedBox(height: 20),
@@ -165,7 +166,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
                     ),
-                    hintText: 'Parolni takror kiriting',
+                    hintText: 're_enter_password'.tr(),
                     hintStyle: TextStyle(color: Colors.grey[400]),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -178,7 +179,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                     ),
                   ),
                   validator: (value) => value != null && value.length < 6
-                      ? 'Parol kamida 6 ta belgi bo\'lishi kerak'
+                      ? 'password_must_be_at_least_6_characters'.tr()
                       : null,
                 ),
                 const SizedBox(height: 30),
@@ -193,7 +194,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                     ),
                     onPressed: signUp,
                     child: Text(
-                      'Ro\'yxatdan o\'tish',
+                      'register'.tr(),
                       style: AppStyle.fontStyle.copyWith(color: Colors.white),
                     ),
                   ),

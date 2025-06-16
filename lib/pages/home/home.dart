@@ -1,10 +1,15 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:listica/pages/home/qr_scanner.dart';
-import 'package:listica/services/utils/utils.dart';
+import 'package:listica/services/buttons/custom_icon_button.dart';
+import 'package:listica/services/modal/custom_input_modal.dart';
+import 'package:listica/services/modal/custom_modal.dart';
+import 'package:listica/services/style/app_style.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:listica/services/style/app_colors.dart';
@@ -141,38 +146,31 @@ class _HomePageState extends State<HomePage> {
   void _confirmUnpairing() {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Diqqat"),
-        content: const Text(
-          "Siz haqiqatdan ham juftlikni bekor qilmoqchimisiz?",
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Yo'q"),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await FirebaseFirestore.instance
-                  .collection('pairing')
-                  .doc(user.uid)
-                  .update({'pairedWith': null});
-              if (pairedUid != null) {
-                await FirebaseFirestore.instance
-                    .collection('pairing')
-                    .doc(pairedUid)
-                    .update({'pairedWith': null});
-              }
-              if (mounted) {
-                setState(() {
-                  pairedUid = null;
-                });
-              }
-            },
-            child: const Text("Ha, bekor qilish"),
-          ),
-        ],
+      builder: (_) => CustomDialog(
+        title: "unpair".tr(),
+        subtitle: "unpair_subtitle".tr(),
+        cancelText: "cancel".tr(),
+        confirmText: "confirm".tr(),
+        cancelButtonColor: const Color(0xFFF5F5F5),
+        onCancel: () => Navigator.pop(context),
+        onConfirm: () async {
+          context.pop();
+          await FirebaseFirestore.instance
+              .collection('pairing')
+              .doc(user.uid)
+              .update({'pairedWith': null});
+          if (pairedUid != null) {
+            await FirebaseFirestore.instance
+                .collection('pairing')
+                .doc(pairedUid)
+                .update({'pairedWith': null});
+          }
+          if (mounted) {
+            setState(() {
+              pairedUid = null;
+            });
+          }
+        },
       ),
     );
   }
@@ -180,7 +178,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: AppColors.foregroundColor,
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('pairing')
@@ -188,7 +186,12 @@ class _HomePageState extends State<HomePage> {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(
+                backgroundColor: AppColors.backgroundColor,
+                color: AppColors.logoColor1,
+              ),
+            );
           }
 
           final data = snapshot.data!.data() as Map<String, dynamic>?;
@@ -199,84 +202,121 @@ class _HomePageState extends State<HomePage> {
           final pairedUid = data['pairedWith'];
           final qrCode = data['code'];
 
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (pairedUid == null) ...[
-                  QrImageView(
-                    data: qrCode ?? '',
-                    version: QrVersions.auto,
-                    size: 200,
-                    backgroundColor: Colors.white,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Sizning kod: $qrCode',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: () => _showScanDialog(context),
-                    child: const Text('Kod bilan bog‘lash'),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () => _scanQRCode(context),
-                    child: const Text('QR kodni skanerlash'),
-                  ),
-                ] else ...[
-                  FutureBuilder<Map<String, dynamic>?>(
-                    future: _getPairedUserData(pairedUid),
-                    builder: (context, userSnapshot) {
-                      if (!userSnapshot.hasData) {
-                        return const CircularProgressIndicator();
-                      }
-                      final pairedData = userSnapshot.data!;
-                      return Column(
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                  pairedData['photoUrl'] ?? '',
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (pairedUid == null) ...[
+                      QrImageView(
+                        data: qrCode ?? '',
+                        version: QrVersions.auto,
+                        size: 200,
+                        backgroundColor: Colors.white,
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        '${'connection_code'.tr()}: $qrCode',
+                        style: AppStyle.fontStyle.copyWith(fontSize: 18),
+                      ),
+                      const SizedBox(height: 30),
+                      CustomIconButton(
+                        icon: Icons.input,
+                        label: 'connect_via_code'.tr(),
+                        onPressed: () => _showScanDialog(context),
+                      ),
+                      const SizedBox(height: 10),
+                      CustomIconButton(
+                        icon: Icons.qr_code_scanner,
+                        label: 'connect_via_qr_code'.tr(),
+                        onPressed: () => _scanQRCode(context),
+                      ),
+                    ] else ...[
+                      FutureBuilder<Map<String, dynamic>?>(
+                        future: _getPairedUserData(pairedUid),
+                        builder: (context, userSnapshot) {
+                          if (!userSnapshot.hasData) {
+                            return const CircularProgressIndicator(
+                              backgroundColor: AppColors.backgroundColor,
+                              color: AppColors.logoColor1,
+                            );
+                          }
+                          final pairedData = userSnapshot.data!;
+                          return Container(
+                            padding: EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: AppColors.backgroundColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(18),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+                                  spreadRadius: 1,
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
                                 ),
-                                radius: 30,
-                              ),
-                              const SizedBox(width: 12),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    pairedData['name'] ?? 'Ismsiz',
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                                  Text(
-                                    pairedData['email'] ?? '',
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 30),
-                          ElevatedButton(
-                            onPressed: _confirmUnpairing,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
+                              ],
                             ),
-                            child: const Text("Juftlikni bekor qilish"),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ],
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'paired'.tr(),
+                                  style: AppStyle.fontStyle.copyWith(
+                                    fontSize: 24,
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                        pairedData['photoUrl'] ?? '',
+                                      ),
+                                      radius: 30,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          pairedData['name'] ?? 'Ismsiz',
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                        Text(
+                                          pairedData['email'] ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 30),
+                                CustomIconButton(
+                                  icon: Icons.link_off,
+                                  label: "unpair".tr(),
+                                  backgroundColor: AppColors.logoColor1,
+                                  foregroundColor: Colors.white,
+                                  onPressed: _confirmUnpairing,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
           );
         },
@@ -285,32 +325,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showScanDialog(BuildContext context) {
-    final codeController = TextEditingController();
-    codeController.text.trim().toUpperCase();
-
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Ulashish kodi'),
-        content: TextField(
-          controller: codeController,
-          decoration: const InputDecoration(hintText: 'Masalan: GS7X5E'),
-          inputFormatters: [UpperCaseTextFormatter()],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Bekor qilish'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final code = codeController.text.trim().toUpperCase();
-              Navigator.pop(context);
-              await _attemptPairing(code);
-            },
-            child: const Text('Ulash'),
-          ),
-        ],
+      builder: (_) => CustomInputDialog(
+        title: 'connection_code'.tr(),
+        hintText: 'eg_code'.tr(),
+        confirmText: 'connect'.tr(),
+        cancelText: 'cancel'.tr(),
+        onConfirm: (code) async {
+          await _attemptPairing(code);
+        },
       ),
     );
   }
