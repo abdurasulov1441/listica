@@ -87,9 +87,16 @@ class _LoginScreenState extends State<LoginScreen> {
         email: emailTextInputController.text.trim(),
         password: passwordTextInputController.text.trim(),
       );
+
+      context.go(Routes.homeScreen);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-      } else {}
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Email yoki parol noto'g'ri")),
+        );
+      } else {
+        print('Ошибка входа: ${e.message}');
+      }
     }
   }
 

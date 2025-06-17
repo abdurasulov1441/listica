@@ -51,7 +51,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             children: [
               const SizedBox(height: 20),
 
-              /// Аватар + Email
+           
               CircleAvatar(
                 radius: 40,
                 backgroundColor: AppColors.iconColor.withOpacity(0.2),
@@ -105,6 +105,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               ),
 
               const Spacer(),
+              Text(
+                'Powered by Zyber Group',
+                style: AppStyle.fontStyle.copyWith(
+                  fontSize: 12,
+                  color: Colors.black54,
+                ),
+              ),
+              Text(
+                'Created by Abdurasulov Abdulaziz',
+                style: AppStyle.fontStyle.copyWith(
+                  fontSize: 12,
+                  color: Colors.black54,
+                ),
+              ),
 
               Padding(
                 padding: const EdgeInsets.symmetric(
